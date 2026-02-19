@@ -13,23 +13,27 @@
     />
   </head>
   <body>
+    <div class="crt-overlay"></div>
     <div class="app-container">
       <!-- Sidebar / Status -->
       <aside class="sidebar">
         <div class="profile-section">
-          <div class="avatar-glitch" id="operator-id" data-text="OP_01">
-            OP_01
+          <div class="stats-row">
+            <div class="avatar-glitch" id="operator-id" data-text="OP_01">
+              OP_01
+            </div>
+            <div class="xp-bar-column">
+              <div class="xp-bar-container">
+                <div class="xp-bar" id="xp-progress" style="width: 0%"></div>
+              </div>
+              <p class="xp-text">
+                <span id="current-xp">0</span> /
+                <span id="next-level-xp">1000</span> XP
+              </p>
+            </div>
           </div>
           <div class="level-info">
-            <p class="label">Nível Atual</p>
             <h2 id="current-level">Rookie Driver</h2>
-            <div class="xp-bar-container">
-              <div class="xp-bar" id="xp-progress" style="width: 0%"></div>
-            </div>
-            <p class="xp-text">
-              <span id="current-xp">0</span> /
-              <span id="next-level-xp">1000</span> XP
-            </p>
           </div>
         </div>
 
@@ -74,6 +78,23 @@
             <div class="status-indicator">
               <span class="status-dot"></span>
               <span id="system-status">SISTEMA AGUARDANDO...</span>
+            </div>
+
+            <div class="timer-options">
+              <div class="presets">
+                <span class="preset-label">STRETCH:</span>
+                <button class="btn-preset" data-time="25">25</button>
+                <button class="btn-preset" data-time="40">40</button>
+                <button class="btn-preset" data-time="60">60</button>
+                <button class="btn-preset" data-time="75">75</button>
+                <button class="btn-preset" data-time="90">90</button>
+              </div>
+              <div class="manual-override">
+                <span class="terminal-mini">></span>
+                <input type="number" id="manual-input" placeholder="00" min="1" max="999">
+                <span class="unit">MIN</span>
+                <button id="btn-apply-manual" class="btn-apply">SET</button>
+              </div>
             </div>
           </div>
         </section>

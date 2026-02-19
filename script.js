@@ -6,9 +6,9 @@ let gameState = {
     { id: 1, text: "Completar 4 Pomodoros", completed: false, xp: 200 },
     {
       id: 2,
-      text: "Completar 1 workflow com testes",
+      text: "Validar 1 workflow completo",
       completed: false,
-      xp: 150,
+      xp: 500,
     },
     { id: 3, text: "Não abrir redes sociais", completed: false, xp: 100 },
     { id: 4, text: "Beber 500ml de água", completed: false, xp: 100 },
@@ -278,7 +278,26 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("btn-short-break")
     .addEventListener("click", () => resetTimer(SHORT_BREAK, "short"));
-  document
-    .getElementById("btn-long-break")
-    .addEventListener("click", () => resetTimer(LONG_BREAK, "long"));
+  document.getElementById("btn-long-break").addEventListener("click", () => resetTimer(LONG_BREAK, "long"));
+
+  // Timer Presets Logic
+  document.querySelectorAll('.btn-preset').forEach(button => {
+    button.addEventListener('click', () => {
+      const minutes = parseInt(button.getAttribute('data-time'));
+      resetTimer(minutes, "focus");
+    });
+  });
+
+  // Manual Timer Logic
+  document.getElementById('btn-apply-manual').addEventListener('click', () => {
+    const input = document.getElementById('manual-input');
+    const minutes = parseInt(input.value);
+    
+    if (minutes > 0 && minutes <= 999) {
+      resetTimer(minutes, "focus");
+      input.value = ""; // Clear for next use
+    } else {
+      alert("Por favor, insira um valor entre 1 e 999.");
+    }
+  });
 });
