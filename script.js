@@ -11,6 +11,7 @@ let gameState = {
       xp: 150,
     },
     { id: 3, text: "Não abrir redes sociais", completed: false, xp: 100 },
+    { id: 4, text: "Beber 500ml de água", completed: false, xp: 100 },
   ],
   streak: 0,
   lastLogin: null,
@@ -147,6 +148,7 @@ function updateLevel() {
     if (gameState.xp >= LEVELS[i].xp) {
       currentLevel = LEVELS[i];
       nextLevel = LEVELS[i + 1] || { xp: 999999, name: "MAX LEVEL" };
+      gameState.level = i; // Sync numeric level
     }
   }
 
@@ -157,7 +159,7 @@ function updateLevel() {
   // Update Operator ID (Dynamic visual)
   const opId = document.getElementById("operator-id");
   const levelIndex = LEVELS.indexOf(currentLevel);
-  const opText = `OP_${String(levelIndex).padStart(2, "0")}`;
+  const opText = `OP_${String(levelIndex + 1).padStart(2, "0")}`;
   opId.innerText = opText;
   opId.setAttribute("data-text", opText);
 
@@ -194,15 +196,19 @@ function renderMissions() {
 
 function toggleMission(id) {
   const mission = gameState.missions.find((m) => m.id === id);
-  if (mission) {
-    mission.completed = !mission.completed;
-    if (mission.completed) {
-      addXP(mission.xp);
-      playSound("finish");
-    } else {
-      addXP(-mission.xp); // Undo XP
-    }
+  if (mission && !mission.completed) {
+    mission.completed = true;
+    addXP(mission.xp);
+    playSound("finish");
     renderMissions();
+
+    // Auto-reset para permitir repetição após 1.5 segundos
+    setTimeout(() => {
+      mission.completed = false;
+      renderMissions();
+      saveGame();
+    }, 1500);
+
     saveGame();
   }
 }
