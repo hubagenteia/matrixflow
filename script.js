@@ -1,6 +1,6 @@
 // Game State
 let gameState = {
-  xp: 0,
+  xp: 1700,
   level: 0,
   missions: [
     { id: 1, text: "Completar 4 Pomodoros", completed: false, xp: 200 },
@@ -226,7 +226,7 @@ function loadGame() {
     const parsed = JSON.parse(saved);
 
     // Restore numeric stats
-    gameState.xp = parsed.xp || 0;
+    gameState.xp = parsed.xp !== undefined ? parsed.xp : 1700;
     gameState.level = parsed.level || 0;
     gameState.streak = parsed.streak || 0;
     gameState.lastLogin = parsed.lastLogin;
