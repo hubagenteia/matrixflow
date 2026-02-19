@@ -1,70 +1,84 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Protocolo: DEEP FOCUS | Uber -> Dev</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Rubik+Glitch&family=VT323&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Rubik+Glitch&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <div class="app-container">
-        <!-- Sidebar / Status -->
-        <aside class="sidebar">
-            <div class="profile-section">
-                <div class="avatar-glitch" data-text="OP_01">OP_01</div>
-                <div class="level-info">
-                    <p class="label">Nível Atual</p>
-                    <h2 id="current-level">Rookie Driver</h2>
-                    <div class="xp-bar-container">
-                        <div class="xp-bar" id="xp-progress" style="width: 0%"></div>
-                    </div>
-                    <p class="xp-text"><span id="current-xp">0</span> / <span id="next-level-xp">1000</span> XP</p>
-                </div>
+      <!-- Sidebar / Status -->
+      <aside class="sidebar">
+        <div class="profile-section">
+          <div class="avatar-glitch" id="operator-id" data-text="OP_01">
+            OP_01
+          </div>
+          <div class="level-info">
+            <p class="label">Nível Atual</p>
+            <h2 id="current-level">Rookie Driver</h2>
+            <div class="xp-bar-container">
+              <div class="xp-bar" id="xp-progress" style="width: 0%"></div>
             </div>
-            
-            <nav class="mission-log">
-                <h3>Log de Missões</h3>
-                <ul id="mission-list">
-                    <!-- Missions injected via JS -->
-                </ul>
-            </nav>
+            <p class="xp-text">
+              <span id="current-xp">0</span> /
+              <span id="next-level-xp">1000</span> XP
+            </p>
+          </div>
+        </div>
 
-            <div class="daily-quote" id="quote-container">
-                <span class="terminal-prompt">></span>
-                <span id="quote-display">Inicializando sistema de motivação...</span>
+        <nav class="mission-log">
+          <h3>Log de Missões</h3>
+          <ul id="mission-list">
+            <!-- Missions injected via JS -->
+          </ul>
+        </nav>
+
+        <div class="daily-quote" id="quote-container">
+          <span class="terminal-prompt">></span>
+          <span id="quote-display">Inicializando sistema de motivação...</span>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <header class="hero-header">
+          <h1 class="glitch-text" data-text="ESCAPE THE CAR">ESCAPE THE CAR</h1>
+          <p class="subtitle">ENTER THE CODE. BUILD YOUR FUTURE.</p>
+        </header>
+
+        <section class="focus-matrix">
+          <div class="timer-container">
+            <div class="timer-ring">
+              <div class="timer-display" id="timer">25:00</div>
             </div>
-        </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="hero-header">
-                <h1 class="glitch-text" data-text="ESCAPE THE CAR">ESCAPE THE CAR</h1>
-                <p class="subtitle">ENTER THE CODE. BUILD YOUR FUTURE.</p>
-            </header>
+            <div class="timer-controls">
+              <button id="btn-focus" class="btn btn-primary">
+                INICIAR FOCO
+              </button>
+              <button id="btn-short-break" class="btn btn-secondary">
+                PAUSA CURTA
+              </button>
+              <button id="btn-long-break" class="btn btn-secondary">
+                PAUSA LONGA
+              </button>
+            </div>
 
-            <section class="focus-matrix">
-                <div class="timer-container">
-                    <div class="timer-ring">
-                        <div class="timer-display" id="timer">25:00</div>
-                    </div>
-                    
-                    <div class="timer-controls">
-                        <button id="btn-focus" class="btn btn-primary">INICIAR FOCO</button>
-                        <button id="btn-short-break" class="btn btn-secondary">PAUSA CURTA</button>
-                        <button id="btn-long-break" class="btn btn-secondary">PAUSA LONGA</button>
-                    </div>
-                    
-                    <div class="status-indicator">
-                        <span class="status-dot"></span>
-                        <span id="system-status">SISTEMA AGUARDANDO...</span>
-                    </div>
-                </div>
-            </section>
-        </main>
+            <div class="status-indicator">
+              <span class="status-dot"></span>
+              <span id="system-status">SISTEMA AGUARDANDO...</span>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
