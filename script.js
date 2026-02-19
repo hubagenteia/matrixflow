@@ -115,6 +115,10 @@ function tick() {
     if (mode === "focus") {
       addXP(XP_PER_POMODORO);
       alert("Foco concluído! +100 XP");
+      resetTimer(SHORT_BREAK, "short"); // Default to short break after focus
+    } else {
+      alert("Pausa finalizada! Pronto para o próximo round?");
+      resetTimer(FOCUS_TIME, "focus"); // Auto-return to focus after break
     }
   }
 }
@@ -124,8 +128,28 @@ function startTimer() {
     isRunning = true;
     timerInterval = setInterval(tick, 1000);
     document.body.classList.add("status-active");
-    document.getElementById("system-status").innerText = "SISTEMA OPERANDO...";
+    updateSystemStatus();
+    document.getElementById("btn-focus").innerText = "PAUSAR";
     playSound("start");
+  }
+}
+
+function pauseTimer() {
+  if (isRunning) {
+    clearInterval(timerInterval);
+    isRunning = false;
+    document.body.classList.remove("status-active");
+    document.getElementById("system-status").innerText = "SISTEMA PAUSADO";
+    document.getElementById("btn-focus").innerText = "CONTINUAR";
+  }
+}
+
+function updateSystemStatus() {
+  const statusEl = document.getElementById("system-status");
+  if (mode === "focus") {
+    statusEl.innerText = "SISTEMA OPERANDO...";
+  } else {
+    statusEl.innerText = `MODO: ${mode === "short" ? "PAUSA CURTA" : "PAUSA LONGA"}`;
   }
 }
 
@@ -136,8 +160,8 @@ function resetTimer(newTime, newMode) {
   totalTime = newTime * 60;
   timeLeft = totalTime;
   document.body.classList.remove("status-active");
-  document.getElementById("system-status").innerText =
-    `MODO: ${newMode.toUpperCase()}`;
+  updateSystemStatus();
+  document.getElementById("btn-focus").innerText = "INICIAR";
   updateTimerDisplay();
 }
 
@@ -272,29 +296,37 @@ document.addEventListener("DOMContentLoaded", () => {
   resetTimer(FOCUS_TIME, "focus"); // Init state
 
   document.getElementById("btn-focus").addEventListener("click", () => {
-    if (isRunning) return;
-    if (mode !== "focus") resetTimer(FOCUS_TIME, "focus");
-    startTimer();
+    if (isRunning) {
+      pauseTimer();
+    } else {
+      startTimer();
+    }
+  });
+
+  document.getElementById("btn-set-focus").addEventListener("click", () => {
+    resetTimer(FOCUS_TIME, "focus");
   });
 
   document
     .getElementById("btn-short-break")
     .addEventListener("click", () => resetTimer(SHORT_BREAK, "short"));
-  document.getElementById("btn-long-break").addEventListener("click", () => resetTimer(LONG_BREAK, "long"));
+  document
+    .getElementById("btn-long-break")
+    .addEventListener("click", () => resetTimer(LONG_BREAK, "long"));
 
   // Timer Presets Logic
-  document.querySelectorAll('.btn-preset').forEach(button => {
-    button.addEventListener('click', () => {
-      const minutes = parseInt(button.getAttribute('data-time'));
+  document.querySelectorAll(".btn-preset").forEach((button) => {
+    button.addEventListener("click", () => {
+      const minutes = parseInt(button.getAttribute("data-time"));
       resetTimer(minutes, "focus");
     });
   });
 
   // Manual Timer Logic
-  document.getElementById('btn-apply-manual').addEventListener('click', () => {
-    const input = document.getElementById('manual-input');
+  document.getElementById("btn-apply-manual").addEventListener("click", () => {
+    const input = document.getElementById("manual-input");
     const minutes = parseInt(input.value);
-    
+
     if (minutes > 0 && minutes <= 999) {
       resetTimer(minutes, "focus");
       input.value = ""; // Clear for next use

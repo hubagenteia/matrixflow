@@ -64,8 +64,9 @@
             </div>
 
             <div class="timer-controls">
-              <button id="btn-focus" class="btn btn-primary">
-                INICIAR FOCO
+              <button id="btn-focus" class="btn btn-primary">INICIAR</button>
+              <button id="btn-set-focus" class="btn btn-secondary">
+                MODO FOCO
               </button>
               <button id="btn-short-break" class="btn btn-secondary">
                 PAUSA CURTA
@@ -91,7 +92,13 @@
               </div>
               <div class="manual-override">
                 <span class="terminal-mini">></span>
-                <input type="number" id="manual-input" placeholder="00" min="1" max="999">
+                <input
+                  type="number"
+                  id="manual-input"
+                  placeholder="00"
+                  min="1"
+                  max="999"
+                />
                 <span class="unit">MIN</span>
                 <button id="btn-apply-manual" class="btn-apply">SET</button>
               </div>
