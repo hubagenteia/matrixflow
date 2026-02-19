@@ -4,8 +4,7 @@
   --matrix-dark: #09090b; 
   --matrix-gray: #18181b; 
   --matrix-green: #00ff41; /* Voltei para o verde clássico da Matrix, mais elétrico */
-  --matrix-dim: #003b00; 
-  --matrix-bright: #00ff41;
+  --matrix-dim: #003b00;
   --matrix-glow: rgba(0, 255, 65, 0.5);
 
 
@@ -156,7 +155,7 @@ body {
 
 .avatar-glitch {
   width: 80px;
-  height: 60px; /* Increased from 40px */
+  height:50px; /* Increased from 40px */
   background: var(--matrix-dark);
   border: 1px solid var(--matrix-green);
   border-radius: 2px;
@@ -185,7 +184,8 @@ body {
 
 .xp-text {
   font-size: 0.75rem;
-  color: var(--matrix-dim);
+  color: var(--matrix-green);
+  opacity: 0.7;
 }
 
 .xp-bar-container {
@@ -219,10 +219,11 @@ body {
 .mission-log h3 {
   font-size: 0.9rem;
   text-transform: uppercase;
-  color: var(--matrix-dim);
+  color: var(--matrix-glow);
   border-bottom: 1px solid var(--matrix-dim);
   padding-bottom: 0.25rem;
   margin-bottom: 0.75rem;
+  opacity: 0.8;
 }
 
 #mission-list {

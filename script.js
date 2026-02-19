@@ -56,6 +56,8 @@ const QUOTES = [
   "Seus sonhos estão do outro lado desse Pomodoro.",
   "Exit Uber. Enter Matrix.",
   "O único jeito de sair do lugar é codando.",
+  "Follow the white rabbit.",
+  "I am not afraid anymore, Neo.",
 ];
 
 // Audio Context for Beeps
