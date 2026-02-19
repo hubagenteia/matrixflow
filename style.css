@@ -1,0 +1,326 @@
+:root {
+    /* Matrix Palette */
+    --matrix-bg: #000000;
+    --matrix-dark: #001a00;
+    --matrix-green: #00ff41;
+    --matrix-dim: #008f11;
+    --matrix-bright: #ccffcc;
+    
+    --slate-800: var(--matrix-dark); /* Remap for compatibility */
+    --slate-900: var(--matrix-bg);
+    
+    /* Accents */
+    --primary: var(--matrix-green);
+    --dim: var(--matrix-dim);
+    --alert: #ff0000;
+
+    /* Fonts */
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-matrix: 'Rubik Glitch', system-ui;
+    --font-terminal: 'VT323', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--matrix-bg);
+    color: var(--matrix-green);
+    font-family: var(--font-mono);
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+
+
+.app-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    background: var(--matrix-bg); /* Use pure black background */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 350px;
+    background-color: rgba(0, 5, 0, 0.9);
+    border-right: 1px solid var(--matrix-dim);
+    padding: 1rem;
+    padding-bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.sidebar::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.avatar-glitch {
+    width: 80px; /* Smaller avatar */
+    height: 80px;
+    background: black;
+    border: 2px solid var(--matrix-green);
+    border-radius: 0; /* Square for matrix feel */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--matrix-green);
+    box-shadow: 0 0 10px var(--matrix-dim);
+    text-shadow: 0 0 5px var(--matrix-green);
+}
+
+.level-info h2 {
+    font-size: 1.1rem;
+    color: var(--matrix-green);
+    text-transform: uppercase;
+    text-shadow: 0 0 5px var(--matrix-dim);
+}
+
+.label {
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--matrix-dim);
+}
+
+.xp-bar-container {
+    width: 100%;
+    height: 6px;
+    background-color: black;
+    border: 1px solid var(--matrix-dim);
+    margin-top: 0.5rem;
+}
+
+.xp-bar {
+    height: 100%;
+    background-color: var(--matrix-green);
+    box-shadow: 0 0 8px var(--matrix-green);
+    width: 0%;
+}
+
+.mission-log {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 100px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-top: 1rem;
+}
+
+.mission-log::-webkit-scrollbar {
+    display: none;
+}
+
+.mission-log h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: var(--matrix-dim);
+    border-bottom: 1px solid var(--matrix-dim);
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.75rem;
+}
+
+#mission-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mission-item {
+    background-color: rgba(0, 20, 0, 0.5);
+    padding: 0.75rem;
+    border: 1px solid var(--matrix-dim);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.mission-item:hover {
+    background-color: var(--matrix-dark);
+    border-color: var(--matrix-green);
+    box-shadow: 0 0 5px var(--matrix-dim);
+    transform: translateX(4px);
+}
+
+.mission-item.completed {
+    opacity: 0.5;
+    text-decoration: line-through;
+    border-color: var(--matrix-dim);
+    color: var(--matrix-dim);
+}
+
+.daily-quote {
+    margin-top: auto;
+    background: black;
+    padding: 0.4rem 0.6rem;
+    border: 1px solid var(--matrix-green);
+    font-size: 0.85rem;
+    color: var(--matrix-green);
+    line-height: 1.4;
+    flex-shrink: 0;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    text-align: left;
+}
+
+.terminal-prompt {
+    color: var(--matrix-green);
+    flex-shrink: 0;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 2rem;
+}
+
+.hero-header {
+    position: absolute;
+    top: 3rem;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+}
+
+.glitch-text {
+    font-family: var(--font-matrix);
+    font-size: 5rem;
+    font-weight: 400; /* Glitch font is already bold/heavy */
+    color: var(--matrix-green);
+    text-transform: uppercase;
+    text-shadow: 0 0 10px var(--matrix-dim);
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: var(--matrix-dim);
+    letter-spacing: 0.3em;
+    margin-top: 0.5rem;
+}
+
+/* Timer */
+.focus-matrix {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1px; /* More space between timer and buttons */
+    height: auto;
+    margin-top: 1px; /* Raised significantly as requested */
+}
+
+
+
+.timer-display {
+    font-family: var(--font-terminal);
+    font-size: 10rem; /* Larger with VT323 */
+    color: var(--matrix-green);
+    text-shadow: 0 0 15px var(--matrix-green);
+    letter-spacing: 5px;
+    padding-top: 5rem;
+    text-align: center;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 2rem;
+}
+
+.btn {
+    background: black;
+    border: 1px solid var(--matrix-green);
+    color: var(--matrix-green);
+    border-radius: 0; /* Square edges */
+    padding: 0.8rem 0; /* Vertical padding only, width handled by min-width */
+    min-width: 160px; /* Fixed width for symmetry */
+    text-align: center;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    box-shadow: 0 0 5px var(--matrix-dim);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn:hover {
+    background: var(--matrix-green);
+    color: black;
+    box-shadow: 0 0 15px var(--matrix-green);
+    cursor: pointer;
+}
+
+.status-indicator {
+    font-size: 0.8rem;
+    color: var(--matrix-dim);
+    letter-spacing: 0.1em;
+    padding-top: 1rem;
+}
+
+.status-dot {
+    background-color: var(--matrix-dim);
+    box-shadow: 0 0 5px var(--matrix-dim);
+}
+
+.status-active .status-dot {
+    background-color: var(--matrix-green);
+    box-shadow: 0 0 15px var(--matrix-green);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--matrix-dim);
+    }
+    
+    .glitch-text { font-size: 2rem; }
+    .timer-display { font-size: 3.5rem; }
+
+}
