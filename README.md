@@ -9,49 +9,52 @@
 
 ## 🏁 A Jornada: Do Volante ao Teclado
 
-O **Ceconipomo** (Protocolo: Deep Focus) não é apenas um timer de Pomodoro. É uma ferramenta de sobrevivência para quem está na transição de carreira de **Uber para Desenvolvedor(a)**. Inspirado na estética Cyberpunk e na filosofia Matrix, cada ciclo de foco concluído é um passo a menos no trânsito e um passo a mais no Git.
+O **Ceconipomo** (Protocolo: Deep Focus) não é apenas um timer de Pomodoro. É uma ferramenta de sobrevivência para quem está na transição de carreira de **Uber para Desenvolvedor(a)**. Inspirado na estética Cyberpunk e na filosofia Matrix, cada ciclo de foco concluído é um passo a menos no trânsito e um passo a mais no código.
 
 ## 🚀 Funcionalidades Elite
 
 ### 🎮 Gamificação Real-Time
-- **Sistema de XP:** Ganhe +100 XP por cada Pomodoro concluído.
-- **Níveis Evolutivos:** Comece como *Rookie Driver* e suba até *CEO do Hub Agente IA* ou *Lenda do Vale do Silício*.
-- **Log de Missões:** Missões específicas para quem está estudando automação e agentes (n8n, testes, foco).
+- **Sistema de XP:** Ganhe +100 XP por cada ciclo de foco concluído.
+- **Níveis Evolutivos (50 Níveis):** Comece como *Motorista 5 Estrelas* (Level 0) e escale a hierarquia até se tornar uma *Lenda do Vale do Silício* (Level 50).
+- **Log de Missões:** Missões específicas com recompensas de XP para acelerar sua evolução.
+- **Protocolos de Sobreposição:** Clique 5 vezes no seu `OPERATOR ID` para abrir o console de sobreposição de XP (Override Manual).
 
 ### ⚡ Interface High-Tech
-- **Estética Glitch:** Design focado em terminais retro-futuristas.
-- **Modos de Foco:** 
-  - `FOCUS MATRIX`: 25 min (ajustável para Deep Work).
-  - `SHORT BREAK`: 5 min (recarga rápida).
-  - `LONG BREAK`: 15 min (reboot do sistema).
-- **Feedback Auditivo:** Bips de sistema para início e término de ciclos.
-- **Typewriter Quotes:** Citações motivacionais de hacker para hacker.
+- **Estética Glitch & CRT:** Design focado em terminais retro-futuristas com efeitos de scanline e glitch.
+- **Controle de Matriz de Foco:**
+  - `Presets de Tempo`: Atalhos rápidos para 25, 40, 60, 75 ou 90 minutos.
+  - `Manual Override`: Insira qualquer valor customizado na entrada de terminal e aplique via `SET`.
+  - `Pausa Dinâmica`: Ajuste o tempo de pausa usando os mesmos controles de foco.
+- **Feedback Auditivo:** Bips de sistema otimizados para início e término de ciclos.
+- **Typewriter Quotes:** Citações motivacionais que podem ser alternadas com um `Double-Click` no container de mensagens.
 
 ### 💾 Persistência de Dados
-Seu progresso é salvo automaticamente no `localStorage`. Recarregue o sistema sem medo; seu XP e suas missões estarão lá.
+Seu progresso (XP, Nível, Missões e Streak) é salvo automaticamente no `localStorage`.  
+O sistema é resiliente: recarregue a página sem medo de perder seus dados.
 
 ---
 
 ## 🛠️ Instalação e Uso
 
-O projeto é **Zero Dependency**. Basta abrir o `index.html` em qualquer navegador moderno.
+O projeto é **Zero Dependency**.  
+Basta abrir o `index.html` em qualquer navegador moderno ou acessar o deploy oficial.
 
 ### Deploy
-Pronto para ser hospedado no **Vercel** ou **GitHub Pages**. (Arquivo `vercel.json` incluso para otimização).
+Hospedado via **Vercel** para máxima performance. (Arquivo `vercel.json` incluso).
 
 ---
 
-## 🧭 Roadmamp de Evolução
+## 🧭 Roadmap de Evolução
+- [x] Timer Manual e Presets customizados.
 - [ ] Sincronização em nuvem via Supabase.
-- [ ] Integração com API de chat (MIA).
+- [ ] Integração com API de chat.
 - [ ] Sistema de Achievements visuais (badges).
-- [ ] Playlist Lofi embutida.
 
 ---
 
 ## ⌨️ Comandos de Admin
-Para ajustes manuais de XP ou reset de sistema, consulte o arquivo [COMANDOS.md](./COMANDOS.md).
+Para manipulação direta via console ou migração de dados, consulte o [COMANDOS.md](./COMANDOS.md).
 
 ---
 
-*“A consistência vence a intensidade. Enter the code.”*
+*“Follow the white rabbit.”*
