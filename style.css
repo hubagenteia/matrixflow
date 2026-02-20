@@ -616,105 +616,113 @@ body {
     min-height: 100vh;
   }
 
+  /* Flatten structure for global reordering */
   .app-container {
     flex-direction: column;
     height: auto;
+    display: flex;
   }
 
-  .sidebar {
-    width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 2px solid var(--matrix-dim);
-    padding: 1rem;
-    position: relative;
-    z-index: 20;
-    background: rgba(0, 5, 0, 0.95);
+  .sidebar, .main-content {
+    display: contents; /* Allows children to participate directly in app-container flexbox */
   }
+
+  /* Global Order System for Mobile */
+  .profile-section { order: 1; margin-bottom: 1rem; padding: 1rem; width: 100%; border-bottom: 1px solid var(--matrix-dim); background: rgba(0, 5, 0, 0.95); position: sticky; top: 0; z-index: 100; }
+  .hero-header { order: 2; position: relative; top: 0; margin: 1.5rem 0; }
+  .focus-matrix { order: 3; width: 100%; padding: 0 1rem; }
+  .daily-quote { order: 4; margin: 2rem 1rem; }
+  .mission-log { order: 5; margin-top: 1rem; width: 100%; padding: 1.5rem 1rem; border-top: 2px solid var(--matrix-dim); background: rgba(0, 10, 0, 0.4); }
 
   .stats-row {
     justify-content: center;
-    margin-bottom: 0.5rem;
   }
 
-  .mission-log {
-    margin-top: 1rem;
-    max-height: 150px;
-    overflow-y: auto;
-    border: 1px solid var(--matrix-dim);
-    padding: 0.5rem;
-    background: rgba(0, 10, 0, 0.3);
+  .level-info h2 {
+    font-size: 0.9rem;
   }
 
-  .daily-quote {
-    margin-top: 1rem;
+  .mission-log h3 {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
   }
 
-  .main-content {
-    flex: none;
+  #mission-list {
+    max-height: none; /* Allow it to take up space at the end */
+  }
+
+  .mission-item {
+    font-size: 0.8rem;
     padding: 1rem;
-    padding-top: 2rem;
-    justify-content: flex-start;
-    min-height: 600px;
-  }
-
-  .hero-header {
-    position: relative;
-    top: 0;
-    margin-bottom: 2rem;
   }
 
   .glitch-text {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     letter-spacing: 1px;
   }
 
   .subtitle {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     letter-spacing: 0.1em;
   }
 
-  .focus-matrix {
-    margin-top: 0;
-    width: 100%;
-  }
-
   .timer-display {
-    font-size: 5rem; /* Increased for mobile legibility */
-    padding-top: 2rem;
+    font-size: 7rem; /* Even larger for impact */
+    padding-top: 1rem;
+    text-shadow: 0 0 20px var(--matrix-green);
   }
 
   .timer-controls {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 1rem;
     width: 100%;
-    max-width: 320px;
-    padding-top: 1.5rem;
+    max-width: none;
+    padding: 1.5rem 0;
   }
 
   #btn-focus {
     grid-column: span 2;
+    padding: 1.2rem 0;
+    font-size: 1.2rem;
+    border-width: 2px;
   }
 
   .btn {
     min-width: 0;
-    padding: 0.75rem 0;
-    font-size: 0.9rem;
+    padding: 1rem 0;
+    font-size: 1rem;
   }
 
   .timer-options {
-    opacity: 0.9;
+    opacity: 1;
     margin-top: 2rem;
-    transform: scale(1.1); /* Slightly larger targets */
+    transform: scale(1.15);
+    background: rgba(0, 20, 0, 0.2);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--matrix-dim);
   }
 
   .presets {
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 1rem;
+  }
+
+  .btn-preset {
+    font-size: 1rem;
+    padding: 0.5rem;
   }
 
   .crt-overlay {
-    opacity: 0.4; /* Slightly reduced for better mobile reading */
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* Improve readability for the quote on mobile */
+  .daily-quote {
+    font-size: 0.95rem;
+    border-left-width: 3px;
+    padding: 1rem;
   }
 }
