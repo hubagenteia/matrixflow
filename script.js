@@ -19,30 +19,59 @@ let gameState = {
 
 // Config
 const XP_PER_POMODORO = 100;
-const FOCUS_TIME = 25; // Altere aqui para 40, 60, 90 etc.
-const SHORT_BREAK = 5;
-const LONG_BREAK = 15;
+let currentFocusTime = 25;
+let currentBreakTime = 5;
 const LEVELS = [
   { name: "Motorista 5 Estrelas", xp: 0 },
-  { name: "Curioso do n8n", xp: 500 },
-  { name: "Mestre dos Workflows", xp: 1200 },
-  { name: "Scripter de Agentes", xp: 2200 },
-  { name: "Prompt Engineer Pro", xp: 3500 },
-  { name: "Arquiteto de Automação", xp: 5000 },
-  { name: "Dev de Agentes Autônomos", xp: 7000 },
-  { name: "Integrador de APIs", xp: 10000 },
-  { name: "Líder de Squad de IA", xp: 14000 },
-  { name: "Growth Hacker de Agentes", xp: 20000 },
-  { name: "CTO de Micro-SaaS", xp: 28000 },
-  { name: "Founder Bootstrap", xp: 38000 },
-  { name: "Primeiro Pitch Deck", xp: 50000 },
-  { name: "Série A Seed Funded", xp: 65000 },
-  { name: "CEO do Hub Agente IA", xp: 85000 },
-  { name: "Startup Unicorn Hunter", xp: 110000 },
-  { name: "Visionário de Palo Alto", xp: 140000 },
-  { name: "Influencer do Vale do Silício", xp: 180000 },
-  { name: "Bilionário de IA", xp: 230000 },
-  { name: "Lenda do Vale do Silício", xp: 300000 },
+  { name: "Iniciado na Matrix", xp: 18 },
+  { name: "Estudante de Lógica", xp: 103 },
+  { name: "Iniciado em JSON", xp: 284 },
+  { name: "Engenheiro de Prompt", xp: 583 },
+  { name: "Mestre do Prompt", xp: 1017 },
+  { name: "Curioso do n8n", xp: 1600 },
+  { name: "Observador de Código", xp: 2361 },
+  { name: "Explorador de Nós", xp: 3314 },
+  { name: "Invocador de Webhooks", xp: 4474 },
+  { name: "Anomalia no Código", xp: 5854 },
+  { name: "Infiltrado no Sistema", xp: 7465 },
+  { name: "Hacker de Scripts", xp: 9320 },
+  { name: "Manipulador de Variáveis", xp: 11432 },
+  { name: "Domador de Bots", xp: 13812 },
+  { name: "Desenvolvedor de Agentes", xp: 16471 },
+  { name: "Scripter de Elite", xp: 19419 },
+  { name: "Especialista em Contexto", xp: 22668 },
+  { name: "Mestre dos Workflows", xp: 26226 },
+  { name: "Alquimista de Dados", xp: 30105 },
+  { name: "Mestre das APIs", xp: 34313 },
+  { name: "Integrador de Sistemas", xp: 38861 },
+  { name: "Otimizador Cibernético", xp: 43758 },
+  { name: "Estrategista de Automação", xp: 49013 },
+  { name: "Criador de Frameworks", xp: 54635 },
+  { name: "Arquiteto de Fluxos", xp: 60633 },
+  { name: "Tech Lead de IA", xp: 67016 },
+  { name: "Engenheiro de Machine Learning", xp: 73792 },
+  { name: "Especialista em Deep Learning", xp: 80971 },
+  { name: "Visionário de Dados", xp: 88560 },
+  { name: "Domador de LLMs", xp: 96568 },
+  { name: "Hacker de Redes Neurais", xp: 105004 },
+  { name: "Orquestrador de Agentes", xp: 113875 },
+  { name: "Orquestrador de Enxames", xp: 123190 },
+  { name: "Arquiteto de Soluções Cloud", xp: 132958 },
+  { name: "Engenheiro de Singularidade", xp: 143185 },
+  { name: "Diretor de Engenharia IA", xp: 153880 },
+  { name: "Tech Lead da Singularidade", xp: 165050 },
+  { name: "Cientista de Agentes", xp: 176703 },
+  { name: "Pesquisador de IAG", xp: 188847 },
+  { name: "Unicórnio do Deep Tech", xp: 201490 },
+  { name: "Founder Tech do Vale", xp: 214638 },
+  { name: "Arquiteto de IAs Autônomas", xp: 228300 },
+  { name: "Arquiteto da Superinteligência", xp: 242481 },
+  { name: "Pioneiro do Código Consciente", xp: 257190 },
+  { name: "Entidade Digital", xp: 272433 },
+  { name: "Ghost in the Shell", xp: 288218 },
+  { name: "Deus Ex Machina", xp: 304552 },
+  { name: "Oráculo da Matrix", xp: 321443 },
+  { name: "Lenda do Vale do Silício", xp: 338896 }
 ];
 
 const QUOTES = [
@@ -91,7 +120,7 @@ let timerInterval;
 let timeLeft = 25 * 60;
 let totalTime = 25 * 60;
 let isRunning = false;
-let mode = "focus"; // focus, short, long
+let mode = "focus"; // focus, break
 
 function updateTimerDisplay() {
   const minutes = Math.floor(timeLeft / 60);
@@ -115,10 +144,10 @@ function tick() {
     if (mode === "focus") {
       addXP(XP_PER_POMODORO);
       alert("Foco concluído! +100 XP");
-      resetTimer(SHORT_BREAK, "short"); // Default to short break after focus
+      resetTimer(currentBreakTime, "break"); // Default break after focus
     } else {
       alert("Pausa finalizada! Pronto para o próximo round?");
-      resetTimer(FOCUS_TIME, "focus"); // Auto-return to focus after break
+      resetTimer(currentFocusTime, "focus"); // Auto-return to focus after break
     }
   }
 }
@@ -147,9 +176,9 @@ function pauseTimer() {
 function updateSystemStatus() {
   const statusEl = document.getElementById("system-status");
   if (mode === "focus") {
-    statusEl.innerText = "SISTEMA OPERANDO...";
+    statusEl.innerText = "MODO: FOCO";
   } else {
-    statusEl.innerText = `MODO: ${mode === "short" ? "PAUSA CURTA" : "PAUSA LONGA"}`;
+    statusEl.innerText = "MODO: PAUSA";
   }
 }
 
@@ -157,6 +186,14 @@ function resetTimer(newTime, newMode) {
   clearInterval(timerInterval);
   isRunning = false;
   mode = newMode;
+  
+  // Update the stored duration for the current mode
+  if (mode === "focus") {
+    currentFocusTime = newTime;
+  } else {
+    currentBreakTime = newTime;
+  }
+
   totalTime = newTime * 60;
   timeLeft = totalTime;
   document.body.classList.remove("status-active");
@@ -273,17 +310,20 @@ function loadGame() {
 }
 
 // Random Quote
+let quoteTimeout;
 function showRandomQuote() {
   const el = document.getElementById("quote-display");
   const quote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
   let i = 0;
+  
+  clearTimeout(quoteTimeout);
   el.innerText = "";
 
   function type() {
     if (i < quote.length) {
       el.textContent += quote.charAt(i);
       i++;
-      setTimeout(type, 50);
+      quoteTimeout = setTimeout(type, 50);
     }
   }
   type();
@@ -293,7 +333,7 @@ function showRandomQuote() {
 document.addEventListener("DOMContentLoaded", () => {
   loadGame();
   showRandomQuote();
-  resetTimer(FOCUS_TIME, "focus"); // Init state
+  resetTimer(currentFocusTime, "focus"); // Init state
 
   document.getElementById("btn-focus").addEventListener("click", () => {
     if (isRunning) {
@@ -304,21 +344,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("btn-set-focus").addEventListener("click", () => {
-    resetTimer(FOCUS_TIME, "focus");
+    resetTimer(currentFocusTime, "focus");
   });
 
   document
     .getElementById("btn-short-break")
-    .addEventListener("click", () => resetTimer(SHORT_BREAK, "short"));
-  document
-    .getElementById("btn-long-break")
-    .addEventListener("click", () => resetTimer(LONG_BREAK, "long"));
+    .addEventListener("click", () => resetTimer(currentBreakTime, "break"));
 
   // Timer Presets Logic
   document.querySelectorAll(".btn-preset").forEach((button) => {
     button.addEventListener("click", () => {
       const minutes = parseInt(button.getAttribute("data-time"));
-      resetTimer(minutes, "focus");
+      resetTimer(minutes, mode); // Adjusts whichever mode we are in
     });
   });
 
@@ -328,10 +365,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const minutes = parseInt(input.value);
 
     if (minutes > 0 && minutes <= 999) {
-      resetTimer(minutes, "focus");
+      resetTimer(minutes, mode); // Adjusts whichever mode we are in
       input.value = ""; // Clear for next use
     } else {
       alert("Por favor, insira um valor entre 1 e 999.");
+    }
+  });
+
+  // Quote Change on Double-Click
+  document.getElementById("quote-container").addEventListener("dblclick", () => {
+    showRandomQuote();
+  });
+
+  // Hidden XP Override Logic
+  let opClickCount = 0;
+  let opClickTimer;
+  document.getElementById("operator-id").addEventListener("click", () => {
+    opClickCount++;
+    clearTimeout(opClickTimer);
+    
+    if (opClickCount >= 5) {
+      const newXP = prompt("PROTOCOLO DE SOBREPOSIÇÃO: Insira o novo valor de XP:");
+      if (newXP !== null && !isNaN(newXP)) {
+        gameState.xp = parseInt(newXP);
+        updateLevel();
+        alert(`XP atualizado para ${gameState.xp}`);
+      }
+      opClickCount = 0;
+    } else {
+      opClickTimer = setTimeout(() => {
+        opClickCount = 0;
+      }, 2000);
     }
   });
 });
