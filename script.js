@@ -3,7 +3,15 @@ let gameState = {
   xp: 1700,
   level: 0,
   missions: [
-    { id: 1, text: "Completar 4 Pomodoros", completed: false, xp: 200 },
+    {
+      id: 1,
+      text: "Completar 4 Pomodoros",
+      completed: false,
+      xp: 0, // XP per step (handled by tick() directly)
+      bonusXp: 200, // Bonus when reaching 4
+      currentProgress: 0,
+      targetProgress: 4,
+    },
     {
       id: 2,
       text: "Validar 1 workflow completo",
@@ -11,11 +19,25 @@ let gameState = {
       xp: 500,
     },
     { id: 3, text: "Não abrir redes sociais", completed: false, xp: 100 },
-    { id: 4, text: "Beber 500ml de água", completed: false, xp: 100 },
+    {
+      id: 4,
+      text: "Beber 500ml de água",
+      completed: false,
+      xp: 100, // XP per glass
+      bonusXp: 200, // Bonus when reaching 4
+      currentProgress: 0,
+      targetProgress: 4,
+    },
+    { id: 5, text: "Pranayama", completed: false, xp: 100 },
+    { id: 6, text: "Malhar", completed: false, xp: 300 },
   ],
+
   streak: 0,
   lastLogin: null,
+  agentMode: false,
 };
+
+
 
 // Config
 const XP_PER_POMODORO = 100;
@@ -71,7 +93,7 @@ const LEVELS = [
   { name: "Ghost in the Shell", xp: 288218 },
   { name: "Deus Ex Machina", xp: 304552 },
   { name: "Oráculo da Matrix", xp: 321443 },
-  { name: "Lenda do Vale do Silício", xp: 338896 }
+  { name: "Lenda do Vale do Silício", xp: 338896 },
 ];
 
 const QUOTES = [
@@ -142,15 +164,24 @@ function tick() {
     document.getElementById("system-status").innerText = "CICLO FINALIZADO.";
 
     if (mode === "focus") {
-      addXP(XP_PER_POMODORO);
-      alert("Foco concluído! +100 XP");
+      const xpMultiplier = gameState.agentMode ? 2 : 1;
+      const reward = XP_PER_POMODORO * xpMultiplier;
+
+      addXP(reward);
+      alert(`Foco concluído! +${reward} XP ${gameState.agentMode ? "(BÔNUS AGENTE 2x)" : ""}`);
+
+      // Avançar missão de pomodoros (ID 1)
+      incrementMissionProgress(1);
+
       resetTimer(currentBreakTime, "break"); // Default break after focus
     } else {
+
       alert("Pausa finalizada! Pronto para o próximo round?");
       resetTimer(currentFocusTime, "focus"); // Auto-return to focus after break
     }
   }
 }
+
 
 function startTimer() {
   if (!isRunning) {
@@ -186,7 +217,7 @@ function resetTimer(newTime, newMode) {
   clearInterval(timerInterval);
   isRunning = false;
   mode = newMode;
-  
+
   // Update the stored duration for the current mode
   if (mode === "focus") {
     currentFocusTime = newTime;
@@ -251,15 +282,63 @@ function renderMissions() {
   gameState.missions.forEach((mission) => {
     const li = document.createElement("li");
     li.className = `mission-item ${mission.completed ? "completed" : ""}`;
-    li.innerText = `${mission.text} [${mission.xp} XP]`;
+
+    let progressText = "";
+    if (mission.targetProgress) {
+      progressText = ` (${mission.currentProgress}/${mission.targetProgress})`;
+    }
+
+    li.innerText = `${mission.text}${progressText} [${mission.xp} XP]`;
     li.onclick = () => toggleMission(mission.id);
     list.appendChild(li);
   });
 }
 
+function incrementMissionProgress(id) {
+  const mission = gameState.missions.find((m) => m.id === id);
+  if (mission && !mission.completed && mission.targetProgress) {
+    mission.currentProgress++;
+
+    // Give XP per step (if defined)
+    if (mission.xp > 0) {
+      addXP(mission.xp);
+    }
+
+    if (mission.currentProgress >= mission.targetProgress) {
+      mission.completed = true;
+
+      // Give Bonus XP (if defined)
+      if (mission.bonusXp) {
+        addXP(mission.bonusXp);
+        alert(`BÔNUS DE MISSÃO: +${mission.bonusXp} XP!`);
+      } else if (mission.xp > 0 && mission.xp !== 100) {
+        // Fallback or legacy behavior for total mission XP
+        addXP(mission.xp);
+      }
+
+      playSound("finish");
+
+      // Auto-reset para permitir repetição
+      setTimeout(() => {
+        mission.completed = false;
+        mission.currentProgress = 0;
+        renderMissions();
+        saveGame();
+      }, 2000);
+    }
+    renderMissions();
+    saveGame();
+  }
+}
+
+
 function toggleMission(id) {
   const mission = gameState.missions.find((m) => m.id === id);
-  if (mission && !mission.completed) {
+  if (!mission || mission.completed) return;
+
+  if (mission.targetProgress) {
+    incrementMissionProgress(id);
+  } else {
     mission.completed = true;
     addXP(mission.xp);
     playSound("finish");
@@ -276,6 +355,7 @@ function toggleMission(id) {
   }
 }
 
+
 // Persistence
 function saveGame() {
   localStorage.setItem("uberToDevSave", JSON.stringify(gameState));
@@ -291,23 +371,48 @@ function loadGame() {
     gameState.level = parsed.level || 0;
     gameState.streak = parsed.streak || 0;
     gameState.lastLogin = parsed.lastLogin;
+    gameState.agentMode = parsed.agentMode || false;
 
     // Restore mission status ONLY (keep text/xp from code)
+
     if (parsed.missions) {
       gameState.missions = gameState.missions.map((mission) => {
         // Find saved version of this mission by ID
         const savedMission = parsed.missions.find((m) => m.id === mission.id);
         if (savedMission) {
-          // Update ONLY the completed status
-          return { ...mission, completed: savedMission.completed };
+          // Update ONLY the completed status and progress
+          return {
+            ...mission,
+            completed: savedMission.completed,
+            currentProgress: savedMission.currentProgress || 0,
+          };
         }
         return mission;
       });
     }
+
   }
   updateLevel();
   renderMissions();
+
+  // Sync Agent Mode Visuals
+  const statusText = document.getElementById("agent-status-text");
+  if (statusText) {
+    statusText.innerText = gameState.agentMode ? "ON" : "OFF";
+    toggleAgentModeVisuals(gameState.agentMode);
+  }
 }
+
+
+function toggleAgentModeVisuals(active) {
+  if (active) {
+    document.body.classList.add("agent-mode-active");
+  } else {
+    document.body.classList.remove("agent-mode-active");
+  }
+}
+
+
 
 // Random Quote
 let quoteTimeout;
@@ -315,7 +420,7 @@ function showRandomQuote() {
   const el = document.getElementById("quote-display");
   const quote = QUOTES[Math.floor(Math.random() * QUOTES.length)];
   let i = 0;
-  
+
   clearTimeout(quoteTimeout);
   el.innerText = "";
 
@@ -373,9 +478,11 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Quote Change on Double-Click
-  document.getElementById("quote-container").addEventListener("dblclick", () => {
-    showRandomQuote();
-  });
+  document
+    .getElementById("quote-container")
+    .addEventListener("dblclick", () => {
+      showRandomQuote();
+    });
 
   // Hidden XP Override Logic
   let opClickCount = 0;
@@ -383,9 +490,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("operator-id").addEventListener("click", () => {
     opClickCount++;
     clearTimeout(opClickTimer);
-    
+
     if (opClickCount >= 5) {
-      const newXP = prompt("PROTOCOLO DE SOBREPOSIÇÃO: Insira o novo valor de XP:");
+      const newXP = prompt(
+        "PROTOCOLO DE SOBREPOSIÇÃO: Insira o novo valor de XP:",
+      );
       if (newXP !== null && !isNaN(newXP)) {
         gameState.xp = parseInt(newXP);
         updateLevel();
@@ -398,4 +507,15 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 2000);
     }
   });
+
+  // Agent Mode Toggle logic
+  const agentToggleButton = document.getElementById("btn-agent-toggle");
+  agentToggleButton.addEventListener("click", () => {
+    gameState.agentMode = !gameState.agentMode;
+    document.getElementById("agent-status-text").innerText = gameState.agentMode ? "ON" : "OFF";
+    toggleAgentModeVisuals(gameState.agentMode);
+    saveGame();
+  });
 });
+
+
