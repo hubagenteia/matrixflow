@@ -154,7 +154,7 @@ body {
 
 
 .avatar-glitch {
-  width: 80px;
+  width: 70px;
   height:50px; /* Increased from 40px */
   background: var(--matrix-dark);
   border: 1px solid var(--matrix-green);
