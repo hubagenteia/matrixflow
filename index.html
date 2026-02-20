@@ -59,10 +59,11 @@
         </header>
 
         <section class="focus-matrix">
-          <div class="timer-container">
+          <div class="timer-container" id="timer-container">
             <div class="timer-ring">
               <div class="timer-display" id="timer">25:00</div>
             </div>
+
 
             <div class="timer-controls">
               <button id="btn-focus" class="btn btn-primary">INICIAR</button>
@@ -77,7 +78,10 @@
             <div class="status-indicator">
               <span class="status-dot"></span>
               <span id="system-status">SISTEMA AGUARDANDO...</span>
+              <span class="status-divider">|</span>
+              <button id="btn-agent-toggle" class="btn-protocol">AGENTE: <span id="agent-status-text">OFF</span></button>
             </div>
+
 
             <div class="timer-options">
               <div class="presets">

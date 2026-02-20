@@ -1,12 +1,11 @@
 :root {
   /* Matrix Palette */
   --matrix-bg: #020203; /* Deepest Zinc */
-  --matrix-dark: #09090b; 
-  --matrix-gray: #18181b; 
+  --matrix-dark: #09090b;
+  --matrix-gray: #18181b;
   --matrix-green: #00ff41; /* Voltei para o verde clássico da Matrix, mais elétrico */
   --matrix-dim: #003b00;
   --matrix-glow: rgba(0, 255, 65, 0.5);
-
 
   --slate-800: var(--matrix-dark); /* Remap for compatibility */
   --slate-900: var(--matrix-bg);
@@ -15,12 +14,21 @@
   --primary: var(--matrix-green);
   --dim: var(--matrix-dim);
   --alert: #ff0000;
+  --agent-purple: #b026ff;
+  --agent-purple-glow: rgba(176, 38, 255, 0.5);
 
   /* Fonts */
   --font-mono: "JetBrains Mono", monospace;
   --font-matrix: "Rubik Glitch", system-ui;
   --font-terminal: "VT323", monospace;
 }
+
+body.agent-mode-active {
+  --matrix-green: var(--agent-purple);
+  --matrix-glow: var(--agent-purple-glow);
+  --matrix-dim: #4c0082; /* Indigo/Deep Purple for dim elements */
+}
+
 
 * {
   margin: 0;
@@ -44,17 +52,17 @@ body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(
-      rgba(18, 16, 16, 0) 50%,
-      rgba(0, 0, 0, 0.1) 50%
-    ),
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
     linear-gradient(
       90deg,
       rgba(255, 0, 0, 0.03),
       rgba(0, 255, 0, 0.01),
       rgba(0, 0, 255, 0.03)
     );
-  background-size: 100% 3px, 3px 100%;
+  background-size:
+    100% 3px,
+    3px 100%;
   pointer-events: none;
   z-index: 1000;
   opacity: 0.6;
@@ -76,27 +84,69 @@ body {
 }
 
 @keyframes flicker {
-  0% { opacity: 0.27861; }
-  5% { opacity: 0.34769; }
-  10% { opacity: 0.23604; }
-  15% { opacity: 0.90626; }
-  20% { opacity: 0.18128; }
-  25% { opacity: 0.83891; }
-  30% { opacity: 0.65583; }
-  35% { opacity: 0.57807; }
-  40% { opacity: 0.26559; }
-  45% { opacity: 0.84693; }
-  50% { opacity: 0.96019; }
-  55% { opacity: 0.08523; }
-  60% { opacity: 0.71056; }
-  65% { opacity: 0.44394; }
-  70% { opacity: 0.22424; }
-  75% { opacity: 0.54236; }
-  80% { opacity: 0.59609; }
-  85% { opacity: 0.32431; }
-  90% { opacity: 0.85103; }
-  95% { opacity: 0.06105; }
-  100% { opacity: 0.5838; }
+  0% {
+    opacity: 0.27861;
+  }
+  5% {
+    opacity: 0.34769;
+  }
+  10% {
+    opacity: 0.23604;
+  }
+  15% {
+    opacity: 0.90626;
+  }
+  20% {
+    opacity: 0.18128;
+  }
+  25% {
+    opacity: 0.83891;
+  }
+  30% {
+    opacity: 0.65583;
+  }
+  35% {
+    opacity: 0.57807;
+  }
+  40% {
+    opacity: 0.26559;
+  }
+  45% {
+    opacity: 0.84693;
+  }
+  50% {
+    opacity: 0.96019;
+  }
+  55% {
+    opacity: 0.08523;
+  }
+  60% {
+    opacity: 0.71056;
+  }
+  65% {
+    opacity: 0.44394;
+  }
+  70% {
+    opacity: 0.22424;
+  }
+  75% {
+    opacity: 0.54236;
+  }
+  80% {
+    opacity: 0.59609;
+  }
+  85% {
+    opacity: 0.32431;
+  }
+  90% {
+    opacity: 0.85103;
+  }
+  95% {
+    opacity: 0.06105;
+  }
+  100% {
+    opacity: 0.5838;
+  }
 }
 
 .app-container {
@@ -151,11 +201,9 @@ body {
   gap: 4px;
 }
 
-
-
 .avatar-glitch {
   width: 70px;
-  height:50px; /* Increased from 40px */
+  height: 50px; /* Increased from 40px */
   background: var(--matrix-dark);
   border: 1px solid var(--matrix-green);
   border-radius: 2px;
@@ -385,12 +433,28 @@ body {
 }
 
 .status-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
   font-size: 0.8rem;
-  color: var(--matrix-green); /* Mais visível */
+  color: var(--matrix-green);
   letter-spacing: 0.1em;
-  padding-top: 1rem;
+  padding-top: 1.5rem;
+}
+
+#system-status,
+.status-dot,
+.status-divider {
   opacity: 0.7;
 }
+
+
+.status-divider {
+  color: var(--matrix-dim);
+  opacity: 0.5;
+}
+
 
 .status-dot {
   background-color: var(--matrix-dim);
@@ -410,7 +474,9 @@ body {
   align-items: center;
   gap: 0.75rem;
   opacity: 0.3;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
   font-size: 0.7rem;
   letter-spacing: 1px;
 }
@@ -497,7 +563,52 @@ body {
   transform: translateY(-1px);
 }
 
-/* Mobile Responsive */
+/* Agent Mode Toggle Styling */
+/* Agent Mode Sub-Protocol Button */
+.btn-protocol {
+
+  background: transparent;
+  border: 1px solid var(--matrix-dim);
+  color: var(--matrix-dim);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 4px 12px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.btn-protocol:hover {
+  border-color: var(--matrix-green);
+  color: var(--matrix-green);
+  box-shadow: 0 0 10px var(--matrix-glow);
+}
+
+/* Agent Mode Visual States - Now mostly handled by CSS variables */
+.agent-mode-active .btn-protocol {
+  border-color: var(--matrix-green);
+  color: var(--matrix-green);
+  opacity: 1; /* Brilho total para combinar com o timer */
+}
+
+
+.agent-mode-active .timer-display {
+  text-shadow: 0 0 25px var(--matrix-green);
+}
+
+.agent-mode-active .btn-primary {
+  box-shadow: 0 4px 0 var(--matrix-dim);
+}
+
+.agent-mode-active .btn-primary:hover {
+  background: var(--matrix-green);
+  color: white;
+  box-shadow: 0 6px 15px var(--matrix-green);
+}
+
+
+
 @media (max-width: 768px) {
   body {
     overflow-y: auto;
@@ -607,4 +718,3 @@ body {
     opacity: 0.4; /* Slightly reduced for better mobile reading */
   }
 }
-
