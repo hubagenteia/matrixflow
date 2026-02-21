@@ -14,7 +14,7 @@ let gameState = {
     },
     {
       id: 2,
-      text: "Validar 1 workflow completo",
+      text: "Marco: Evolução do Agente",
       completed: false,
       xp: 500,
     },
@@ -28,8 +28,8 @@ let gameState = {
       currentProgress: 0,
       targetProgress: 4,
     },
-    { id: 5, text: "Pranayama", completed: false, xp: 100 },
-    { id: 6, text: "Malhar", completed: false, xp: 300 },
+    { id: 5, text: "Pranayama", completed: false, xp: 200 },
+    { id: 6, text: "Malhar", completed: false, xp: 500 },
   ],
 
   streak: 0,
@@ -37,10 +37,8 @@ let gameState = {
   agentMode: false,
 };
 
-
-
 // Config
-const XP_PER_POMODORO = 100;
+const XP_PER_MINUTE = 4;
 let currentFocusTime = 25;
 let currentBreakTime = 5;
 const LEVELS = [
@@ -164,24 +162,26 @@ function tick() {
     document.getElementById("system-status").innerText = "CICLO FINALIZADO.";
 
     if (mode === "focus") {
+      const baseReward = Math.ceil(currentFocusTime * XP_PER_MINUTE);
       const xpMultiplier = gameState.agentMode ? 2 : 1;
-      const reward = XP_PER_POMODORO * xpMultiplier;
+      const reward = baseReward * xpMultiplier;
 
       addXP(reward);
-      alert(`Foco concluído! +${reward} XP ${gameState.agentMode ? "(BÔNUS AGENTE 2x)" : ""}`);
+      alert(
+        `Foco concluído! +${reward} XP ${gameState.agentMode ? "(BÔNUS AGENTE 2x)" : ""}`,
+      );
 
       // Avançar missão de pomodoros (ID 1)
-      incrementMissionProgress(1);
+      const missionPoints = gameState.agentMode ? 2 : 1;
+      incrementMissionProgress(1, missionPoints);
 
       resetTimer(currentBreakTime, "break"); // Default break after focus
     } else {
-
       alert("Pausa finalizada! Pronto para o próximo round?");
       resetTimer(currentFocusTime, "focus"); // Auto-return to focus after break
     }
   }
 }
-
 
 function startTimer() {
   if (!isRunning) {
@@ -225,7 +225,7 @@ function resetTimer(newTime, newMode) {
     currentBreakTime = newTime;
   }
 
-  totalTime = newTime * 60;
+  totalTime = Math.round(newTime * 60);
   timeLeft = totalTime;
   document.body.classList.remove("status-active");
   updateSystemStatus();
@@ -294,14 +294,14 @@ function renderMissions() {
   });
 }
 
-function incrementMissionProgress(id) {
+function incrementMissionProgress(id, amount = 1) {
   const mission = gameState.missions.find((m) => m.id === id);
   if (mission && !mission.completed && mission.targetProgress) {
-    mission.currentProgress++;
+    mission.currentProgress += amount;
 
     // Give XP per step (if defined)
     if (mission.xp > 0) {
-      addXP(mission.xp);
+      addXP(mission.xp * amount);
     }
 
     if (mission.currentProgress >= mission.targetProgress) {
@@ -321,7 +321,7 @@ function incrementMissionProgress(id) {
       // Auto-reset para permitir repetição
       setTimeout(() => {
         mission.completed = false;
-        mission.currentProgress = 0;
+        mission.currentProgress = mission.currentProgress % mission.targetProgress;
         renderMissions();
         saveGame();
       }, 2000);
@@ -330,7 +330,6 @@ function incrementMissionProgress(id) {
     saveGame();
   }
 }
-
 
 function toggleMission(id) {
   const mission = gameState.missions.find((m) => m.id === id);
@@ -354,7 +353,6 @@ function toggleMission(id) {
     saveGame();
   }
 }
-
 
 // Persistence
 function saveGame() {
@@ -390,7 +388,6 @@ function loadGame() {
         return mission;
       });
     }
-
   }
   updateLevel();
   renderMissions();
@@ -403,7 +400,6 @@ function loadGame() {
   }
 }
 
-
 function toggleAgentModeVisuals(active) {
   if (active) {
     document.body.classList.add("agent-mode-active");
@@ -411,8 +407,6 @@ function toggleAgentModeVisuals(active) {
     document.body.classList.remove("agent-mode-active");
   }
 }
-
-
 
 // Random Quote
 let quoteTimeout;
@@ -467,7 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Manual Timer Logic
   document.getElementById("btn-apply-manual").addEventListener("click", () => {
     const input = document.getElementById("manual-input");
-    const minutes = parseInt(input.value);
+    const minutes = parseFloat(input.value);
 
     if (minutes > 0 && minutes <= 999) {
       resetTimer(minutes, mode); // Adjusts whichever mode we are in
@@ -512,10 +506,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const agentToggleButton = document.getElementById("btn-agent-toggle");
   agentToggleButton.addEventListener("click", () => {
     gameState.agentMode = !gameState.agentMode;
-    document.getElementById("agent-status-text").innerText = gameState.agentMode ? "ON" : "OFF";
+    document.getElementById("agent-status-text").innerText = gameState.agentMode
+      ? "ON"
+      : "OFF";
     toggleAgentModeVisuals(gameState.agentMode);
     saveGame();
   });
 });
-
-
