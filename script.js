@@ -208,8 +208,10 @@ function updateSystemStatus() {
   const statusEl = document.getElementById("system-status");
   if (mode === "focus") {
     statusEl.innerText = "MODO: FOCO";
+    toggleBreakModeVisuals(false);
   } else {
     statusEl.innerText = "MODO: PAUSA";
+    toggleBreakModeVisuals(true);
   }
 }
 
@@ -321,7 +323,8 @@ function incrementMissionProgress(id, amount = 1) {
       // Auto-reset para permitir repetição
       setTimeout(() => {
         mission.completed = false;
-        mission.currentProgress = mission.currentProgress % mission.targetProgress;
+        mission.currentProgress =
+          mission.currentProgress % mission.targetProgress;
         renderMissions();
         saveGame();
       }, 2000);
@@ -405,6 +408,14 @@ function toggleAgentModeVisuals(active) {
     document.body.classList.add("agent-mode-active");
   } else {
     document.body.classList.remove("agent-mode-active");
+  }
+}
+
+function toggleBreakModeVisuals(active) {
+  if (active) {
+    document.body.classList.add("break-mode-active");
+  } else {
+    document.body.classList.remove("break-mode-active");
   }
 }
 

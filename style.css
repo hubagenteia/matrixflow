@@ -21,6 +21,11 @@
   --font-mono: "JetBrains Mono", monospace;
   --font-matrix: "Rubik Glitch", system-ui;
   --font-terminal: "VT323", monospace;
+
+  /* Break Mode Palette - Calm Blue/Teal */
+  --break-blue: #70e0ff;
+  --break-glow: rgba(112, 224, 255, 0.5);
+  --break-dim: #004d66;
 }
 
 body.agent-mode-active {
@@ -29,6 +34,11 @@ body.agent-mode-active {
   --matrix-dim: #4c0082; /* Indigo/Deep Purple for dim elements */
 }
 
+body.break-mode-active {
+  --matrix-green: var(--break-blue);
+  --matrix-glow: var(--break-glow);
+  --matrix-dim: var(--break-dim);
+}
 
 * {
   margin: 0;
@@ -449,12 +459,10 @@ body {
   opacity: 0.7;
 }
 
-
 .status-divider {
   color: var(--matrix-dim);
   opacity: 0.5;
 }
-
 
 .status-dot {
   background-color: var(--matrix-dim);
@@ -566,7 +574,6 @@ body {
 /* Agent Mode Toggle Styling */
 /* Agent Mode Sub-Protocol Button */
 .btn-protocol {
-
   background: transparent;
   border: 1px solid var(--matrix-dim);
   color: var(--matrix-dim);
@@ -592,7 +599,6 @@ body {
   opacity: 1; /* Brilho total para combinar com o timer */
 }
 
-
 .agent-mode-active .timer-display {
   text-shadow: 0 0 25px var(--matrix-green);
 }
@@ -606,8 +612,6 @@ body {
   color: white;
   box-shadow: 0 6px 15px var(--matrix-green);
 }
-
-
 
 @media (max-width: 768px) {
   body {
@@ -623,16 +627,46 @@ body {
     display: flex;
   }
 
-  .sidebar, .main-content {
+  .sidebar,
+  .main-content {
     display: contents; /* Allows children to participate directly in app-container flexbox */
   }
 
   /* Global Order System for Mobile */
-  .profile-section { order: 1; margin-bottom: 1rem; padding: 1rem; width: 100%; border-bottom: 1px solid var(--matrix-dim); background: rgba(0, 5, 0, 0.95); position: sticky; top: 0; z-index: 100; }
-  .hero-header { order: 2; position: relative; top: 0; margin: 1.5rem 0; }
-  .focus-matrix { order: 3; width: 100%; padding: 0 1rem; }
-  .daily-quote { order: 4; margin: 2rem 1rem; }
-  .mission-log { order: 5; margin-top: 1rem; width: 100%; padding: 1.5rem 1rem; border-top: 2px solid var(--matrix-dim); background: rgba(0, 10, 0, 0.4); }
+  .profile-section {
+    order: 1;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    width: 100%;
+    border-bottom: 1px solid var(--matrix-dim);
+    background: rgba(0, 5, 0, 0.95);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .hero-header {
+    order: 2;
+    position: relative;
+    top: 0;
+    margin: 1.5rem 0;
+  }
+  .focus-matrix {
+    order: 3;
+    width: 100%;
+    padding: 0 1rem;
+  }
+  .daily-quote {
+    order: 4;
+    margin: 2rem 1rem;
+  }
+  .mission-log {
+    order: 5;
+    margin-top: 1rem;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    border-top: 2px solid var(--matrix-dim);
+    background: rgba(0, 10, 0, 0.4);
+  }
 
   .stats-row {
     justify-content: center;
