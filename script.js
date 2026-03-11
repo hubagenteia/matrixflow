@@ -41,57 +41,65 @@ let gameState = {
 const XP_PER_MINUTE = 4;
 let currentFocusTime = 25;
 let currentBreakTime = 5;
+const XP_BASE = 7.65;
+const XP_EXPONENT = 3;
+
+function getRequiredXP(levelIndex) {
+  if (levelIndex === 0) return 0;
+  return Math.floor(XP_BASE * Math.pow(levelIndex, XP_EXPONENT));
+}
+
 const LEVELS = [
-  { name: "Motorista 5 Estrelas", xp: 0 },
-  { name: "Iniciado na Matrix", xp: 18 },
-  { name: "Estudante de Lógica", xp: 103 },
-  { name: "Iniciado em JSON", xp: 284 },
-  { name: "Engenheiro de Prompt", xp: 583 },
-  { name: "Mestre do Prompt", xp: 1017 },
-  { name: "Curioso do n8n", xp: 1600 },
-  { name: "Observador de Código", xp: 2361 },
-  { name: "Explorador de Nós", xp: 3314 },
-  { name: "Invocador de Webhooks", xp: 4474 },
-  { name: "Anomalia no Código", xp: 5854 },
-  { name: "Infiltrado no Sistema", xp: 7465 },
-  { name: "Hacker de Scripts", xp: 9320 },
-  { name: "Manipulador de Variáveis", xp: 11432 },
-  { name: "Domador de Bots", xp: 13812 },
-  { name: "Desenvolvedor de Agentes", xp: 16471 },
-  { name: "Scripter de Elite", xp: 19419 },
-  { name: "Especialista em Contexto", xp: 22668 },
-  { name: "Mestre dos Workflows", xp: 26226 },
-  { name: "Alquimista de Dados", xp: 30105 },
-  { name: "Mestre das APIs", xp: 34313 },
-  { name: "Integrador de Sistemas", xp: 38861 },
-  { name: "Otimizador Cibernético", xp: 43758 },
-  { name: "Estrategista de Automação", xp: 49013 },
-  { name: "Criador de Frameworks", xp: 54635 },
-  { name: "Arquiteto de Fluxos", xp: 60633 },
-  { name: "Tech Lead de IA", xp: 67016 },
-  { name: "Engenheiro de Machine Learning", xp: 73792 },
-  { name: "Especialista em Deep Learning", xp: 80971 },
-  { name: "Visionário de Dados", xp: 88560 },
-  { name: "Domador de LLMs", xp: 96568 },
-  { name: "Hacker de Redes Neurais", xp: 105004 },
-  { name: "Orquestrador de Agentes", xp: 113875 },
-  { name: "Orquestrador de Enxames", xp: 123190 },
-  { name: "Arquiteto de Soluções Cloud", xp: 132958 },
-  { name: "Engenheiro de Singularidade", xp: 143185 },
-  { name: "Diretor de Engenharia IA", xp: 153880 },
-  { name: "Tech Lead da Singularidade", xp: 165050 },
-  { name: "Cientista de Agentes", xp: 176703 },
-  { name: "Pesquisador de IAG", xp: 188847 },
-  { name: "Unicórnio do Deep Tech", xp: 201490 },
-  { name: "Founder Tech do Vale", xp: 214638 },
-  { name: "Arquiteto de IAs Autônomas", xp: 228300 },
-  { name: "Arquiteto da Superinteligência", xp: 242481 },
-  { name: "Pioneiro do Código Consciente", xp: 257190 },
-  { name: "Entidade Digital", xp: 272433 },
-  { name: "Ghost in the Shell", xp: 288218 },
-  { name: "Deus Ex Machina", xp: 304552 },
-  { name: "Oráculo da Matrix", xp: 321443 },
-  { name: "Lenda do Vale do Silício", xp: 338896 },
+  "Motorista 5 Estrelas",
+  "Iniciado na Matrix",
+  "Estudante de Lógica",
+  "Iniciado em JSON",
+  "Engenheiro de Prompt",
+  "Mestre do Prompt",
+  "Curioso do n8n",
+  "Observador de Código",
+  "Explorador de Nós",
+  "Invocador de Webhooks",
+  "Anomalia no Código",
+  "Infiltrado no Sistema",
+  "Hacker de Scripts",
+  "Manipulador de Variáveis",
+  "Domador de Bots",
+  "Desenvolvedor de Agentes",
+  "Scripter de Elite",
+  "Especialista em Contexto",
+  "Mestre dos Workflows",
+  "Alquimista de Dados",
+  "Mestre das APIs",
+  "Integrador de Sistemas",
+  "Otimizador Cibernético",
+  "Estrategista de Automação",
+  "Criador de Frameworks",
+  "Arquiteto de Fluxos",
+  "Tech Lead de IA",
+  "Engenheiro de Machine Learning",
+  "Especialista em Deep Learning",
+  "Visionário de Dados",
+  "Domador de LLMs",
+  "Hacker de Redes Neurais",
+  "Orquestrador de Agentes",
+  "Orquestrador de Enxames",
+  "Arquiteto de Soluções Cloud",
+  "Engenheiro de Singularidade",
+  "Diretor de Engenharia IA",
+  "Tech Lead da Singularidade",
+  "Cientista de Agentes",
+  "Pesquisador de IAG",
+  "Unicórnio do Deep Tech",
+  "Founder Tech do Vale",
+  "Arquiteto de IAs Autônomas",
+  "Arquiteto da Superinteligência",
+  "Pioneiro do Código Consciente",
+  "Entidade Digital",
+  "Ghost in the Shell",
+  "Deus Ex Machina",
+  "Oráculo da Matrix",
+  "Lenda do Vale do Silício"
 ];
 
 const QUOTES = [
@@ -237,30 +245,43 @@ function resetTimer(newTime, newMode) {
 
 // XP & Level System
 function updateLevel() {
-  let currentLevel = LEVELS[0];
-  let nextLevel = LEVELS[1];
+  let currentLevelIndex = 0;
+  let nextLevelIndex = 1;
 
   for (let i = 0; i < LEVELS.length; i++) {
-    if (gameState.xp >= LEVELS[i].xp) {
-      currentLevel = LEVELS[i];
-      nextLevel = LEVELS[i + 1] || { xp: 999999, name: "MAX LEVEL" };
+    let reqXp = getRequiredXP(i);
+    if (gameState.xp >= reqXp) {
+      currentLevelIndex = i;
+      nextLevelIndex = i + 1;
       gameState.level = i; // Sync numeric level
+    } else {
+      break;
     }
   }
 
-  document.getElementById("current-level").innerText = currentLevel.name;
+  const currentLevelName = LEVELS[currentLevelIndex];
+  
+  // Handlers para quando passa do último nível
+  let nextLevelName = "MAX LEVEL";
+  let currentLevelXP = getRequiredXP(currentLevelIndex);
+  let nextLevelXP = 999999;
+  
+  if (nextLevelIndex < LEVELS.length) {
+    nextLevelXP = getRequiredXP(nextLevelIndex);
+  }
+
+  document.getElementById("current-level").innerText = currentLevelName;
   document.getElementById("current-xp").innerText = gameState.xp;
-  document.getElementById("next-level-xp").innerText = nextLevel.xp;
+  document.getElementById("next-level-xp").innerText = nextLevelXP;
 
   // Update Operator ID (Dynamic visual)
   const opId = document.getElementById("operator-id");
-  const levelIndex = LEVELS.indexOf(currentLevel);
-  const opText = `OP_${String(levelIndex + 1).padStart(2, "0")}`;
+  const opText = `OP_${String(currentLevelIndex + 1).padStart(2, "0")}`;
   opId.innerText = opText;
   opId.setAttribute("data-text", opText);
 
-  const xpNeeded = nextLevel.xp - currentLevel.xp;
-  const xpProgress = gameState.xp - currentLevel.xp;
+  const xpNeeded = nextLevelXP - currentLevelXP;
+  const xpProgress = gameState.xp - currentLevelXP;
   let progressPercent = 0;
 
   if (xpNeeded > 0) {
