@@ -212,8 +212,8 @@ body {
 }
 
 .avatar-glitch {
-  width: 60px;
-  height: 48px; /* Increased from 40px */
+  width: 54px;
+  height: 42px; /* Increased from 40px */
   background: var(--matrix-dark);
   border: 1px solid var(--matrix-green);
   border-radius: 2px;
